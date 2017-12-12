@@ -36,18 +36,29 @@ def file_comparing():
     line2_set = set(line2_list)
     matched_list = list(line1_set ^ line2_set)
 
+    line1_consequence = [line for line in line1_list if line in matched_list]
+    line2_consequence = [line for line in line2_list if line in matched_list]
+
+    consequence = open("consequence.txt", "w", encoding="utf-8")
+    consequence.write("---")
+    consequence.write(str_file1)
+    consequence.write("---\n\n")
+    for n in range(len(line1_consequence)):
+        consequence.write(line1_consequence[n])
+    consequence.write("\n\n---")
+    consequence.write(str_file2)
+    consequence.write("---\n\n")
+    for n in range(len(line2_consequence)):
+        consequence.write(line2_consequence[n])
+    consequence.close()
+            
+
     pprint.pprint(matched_list)
     label1 = ttk.Label(
             frame1,
-            text="---The differnce between input files---",
+            text="---The differences between input files were saved in 'consequence.txt'.---",
             padding=(5,10))
     label1.grid(row=4,column=1)
-    for n in range(len(matched_list)):
-        label1 = ttk.Label(
-            frame1,
-            text=matched_list[n],
-            padding=(5,10))
-        label1.grid(row=5+n,column=1)
     file1.close()
     file2.close()
     
@@ -78,7 +89,7 @@ photo.grid(row=0,column=0)
 
 message_string = ttk.Label(
     frame1,
-    text='When file is input, two files row by row, and outputs the "line" which is not existed in the other file.\nThis only supports "utf-8"'
+    text='When files are input, two files row by row\n\n,and outputs the "line" which is not existed\n\nin the other file.\n\nThis only supports "utf-8"'
     )
 message_string.grid(row=0,column=1)
 
@@ -89,8 +100,8 @@ entry1.grid(row=1,column=1,sticky=W)
 string_file2.grid(row=2,column=0,sticky=E)
 entry2.grid(row=2,column=1,sticky=W)
 
-button1.grid(row=3,column=1,sticky=W)
-button2.grid(row=3,column=2,sticky=W)
+button1.grid(row=3,column=0,sticky=W)
+button2.grid(row=3,column=1,sticky=W)
 
 for child in frame1.winfo_children():
     child.grid_configure(padx=5, pady=5)
